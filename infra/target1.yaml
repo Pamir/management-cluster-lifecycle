@@ -1,0 +1,64 @@
+apiVersion: msft.microsoft/v1
+kind: AksHciCluster
+metadata:
+  finalizers:
+  - akshcicluster.msft.microsoft
+  generation: 2
+  labels:
+    msft.microsoft/capi-name: capi-for-moc
+  name: mycluster
+  namespace: default
+spec:
+  additionalFeatures:
+  - featureName: secrets-encryption
+  - featureName: rotate-certificates
+  clusterConfiguration:
+    cloudProviderConfiguration:
+      configuration: moc
+    cniConfiguration:
+      configuration: calico
+    csiConfiguration:
+      configuration: akshcicsi
+      dynamic: true
+      storageContainer: MocStorageContainer
+    kubernetesVersion: v1.22.4
+    location: MocLocation
+    networkConfiguration:
+      podCidr: 10.244.0.0/16
+    resourceGroup: clustergroup-mycluster
+  controlPlaneConfiguration:
+    infrastructureProfile:
+      hardwareProfile:
+        customSize: {}
+        vmSize: Standard_A4_v2
+      networkProfile: {}
+      osProfile:
+        osType: Linux
+        ssh:
+          publicKeys:
+          - keyData: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVQ6C4j/3R8lSB6dODRWSUmTu2tfSuHgUlX7hk+oB01AHEhyJ1QX+4qkSf23wud6xZkC0gavBNsWe48sDMwM5kBWKF/0kZXPEI2HPjqGaQWy+T+hivDcUSK0iiw1vYTnX3XPVjYkKGieTESrXIT+NV77aNRc06mlVkOQFel7s3YBTrt3yVMt/rKKFkdg941wE/rf4v7byDmAxFnHRoSwbQINBjYRphYoTMuXKJwqwo/YEy0zo1ek9ZSV6Mvxk9z04VfQPjAEaqyMiH6z8GLC0dpS2ZbdYwEKRPSbkm+Ma7aE94YZ+QMVAiJ3YEkYCoheFdwnIJP3SskU96RPELHJ4eKkq2qgTkbiqnmzt2+F48jAbgx5Gp7bWVCYL5D4NIBuj6EOhFKLmdllaO56TeKRerP18ZTk23AdDnme7UhLsjZ2m73ITDzH4ASjb/NaU67er9wFs0kl5CiRcz/hE2qTk/eyEME4HLYYCueZSviBc3F9GX9ZFf+I0csd1pTFy9I+s=
+      securityProfile: {}
+      storageProfile:
+        imageReference: {}
+    replicas: 1
+  controlPlaneEndpoint:
+    host: ""
+    port: 0
+  loadBalancerConfiguration:
+    image:
+      osType: Linux
+      osVersion: "2022-02-01"
+    machineType: Standard_A4_v2
+    type: unstacked-haproxy
+  networkRefs:
+  - apiVersion: msft.microsoft/v1
+    kind: AksHciNetwork
+    name: mgmtvnet
+    namespace: default
+  packageVersion: v1.22.4
+  servicesLoadBalancerConfiguration:
+    image:
+      osType: Linux
+    machineType: Standard_A4_v2
+    type: unstacked-haproxy
+  sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVQ6C4j/3R8lSB6dODRWSUmTu2tfSuHgUlX7hk+oB01AHEhyJ1QX+4qkSf23wud6xZkC0gavBNsWe48sDMwM5kBWKF/0kZXPEI2HPjqGaQWy+T+hivDcUSK0iiw1vYTnX3XPVjYkKGieTESrXIT+NV77aNRc06mlVkOQFel7s3YBTrt3yVMt/rKKFkdg941wE/rf4v7byDmAxFnHRoSwbQINBjYRphYoTMuXKJwqwo/YEy0zo1ek9ZSV6Mvxk9z04VfQPjAEaqyMiH6z8GLC0dpS2ZbdYwEKRPSbkm+Ma7aE94YZ+QMVAiJ3YEkYCoheFdwnIJP3SskU96RPELHJ4eKkq2qgTkbiqnmzt2+F48jAbgx5Gp7bWVCYL5D4NIBuj6EOhFKLmdllaO56TeKRerP18ZTk23AdDnme7UhLsjZ2m73ITDzH4ASjb/NaU67er9wFs0kl5CiRcz/hE2qTk/eyEME4HLYYCueZSviBc3F9GX9ZFf+I0csd1pTFy9I+s=
